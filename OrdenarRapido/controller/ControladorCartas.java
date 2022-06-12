@@ -5,25 +5,28 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.JFrame;
 
 import model.Baraja;
 import model.Carta;
+import model.Puntuacion;
+import view.TablaDePuntuaciones;
 
 public class ControladorCartas implements ActionListener {
 	//En principio usamos un array, por el tipo de juego, puede aumentarse de dificultad
 	private ArrayList<JButton> cartas = new ArrayList<JButton>();
 	private int[] posiciones = new int[6];
 	private Baraja baraja;
+	private String nombre;
 	private int aciertos = 0;
 	private int fallos = 0;
 	private int cuantaCarta = 0;
 	private int contadorClicks;
 	private int tiempoInicial;
 	private int tiempoFinal;
-	private JLabel txtPuntos;
-	private JLabel txtAciertos;
-	private JLabel txtFallos;
+	private Puntuacion puntuacion;
+	private JFrame pantallaJuego;
+	private TablaDePuntuaciones tablaDePuntuaciones;
 
 	//Por cada click colocamos la carta en una posicion y la bloqueamos, a la espera de la ultima. cuando esté se acabará el juego y se dará paso a la puntuación.
 	public void actionPerformed(ActionEvent e) {
@@ -94,6 +97,10 @@ public class ControladorCartas implements ActionListener {
 					}
 					tiempoFinal = (int)System.currentTimeMillis();
 					calcularPuntuacion();
+					pantallaJuego.setVisible(false);
+					tablaDePuntuaciones.setVisible(true);
+					tablaDePuntuaciones.darPuntos(puntuacion);
+					tablaDePuntuaciones.rellenarTabla();
 				}
 			}
 		}
@@ -131,7 +138,6 @@ public class ControladorCartas implements ActionListener {
 		int puntos = 0;
 		int tiempo;
 		tiempo =(tiempoFinal-tiempoInicial)/1000;
-		System.out.println("Has tardado "+tiempo+" segundos.");
 		if(tiempo<3) {
 			puntos = 1000;
 		}else if(tiempo <4) {
@@ -147,21 +153,28 @@ public class ControladorCartas implements ActionListener {
 		}else {
 			puntos = 100;
 		}
-		puntos = puntos +(aciertos*100)-(fallos*100);
-		System.out.println("Puntuación total: "+puntos+" puntos.");
-		txtPuntos.setText("Puntuaci\u00F3n: "+puntos);
-		txtAciertos.setText("Aciertos: "+aciertos);
-		txtFallos.setText("Fallos: "+fallos);
+		puntos = puntos +(aciertos*100)-(fallos*300);
+		if(puntos <=0) {
+			puntos = 0;
+		}
+		puntuacion = new Puntuacion(puntos, nombre, tiempo);
 	}
 	//Agregamos una baraja al controlador.
 	public void darBaraja(Baraja baraja) {
 		this.baraja=baraja;
 	}
 
-	//Agregamos los JLabel para poder mostrar en un futuro la información.
-	public void darTextos(JLabel puntos, JLabel aciertos, JLabel fallos) {
-		this.txtPuntos = puntos;
-		this.txtAciertos= aciertos;
-		this.txtFallos = fallos;
+	//Agregamos el JFrame main.
+		public void darPantallaJuego(JFrame pantallaJuego) {
+			this.pantallaJuego = pantallaJuego;
+		}
+	//Agregamos el JFrame que será la tabla de puntuaciones.
+	public void darTabla(TablaDePuntuaciones tablaDePuntuaciones) {
+		this.tablaDePuntuaciones = tablaDePuntuaciones;
 	}
+	//Agregamos el nombre del jugador
+	public void darNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
 }

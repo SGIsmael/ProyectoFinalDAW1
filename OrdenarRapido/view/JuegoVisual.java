@@ -12,24 +12,43 @@ import controller.ControladorCartas;
 import model.Baraja;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class JuegoVisual extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ControladorCartas controladorCartas = new ControladorCartas();
 	private Baraja baraja = new Baraja();
+	private String NJugador;
+	private JLabel nombreJugador;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					JuegoVisual frame = new JuegoVisual();
+					frame.pedirNombre();
 					frame.setVisible(true);
+					Thread.sleep(1000);
 					frame.controladorCartas.jugar();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+	}
+	//Le pediremos el nombre al jugador sin interfaz gráfica por ahora.
+	protected void pedirNombre() {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			System.out.println("Introduce tu nombre: ");
+			NJugador = bf.readLine();
+			nombreJugador.setText("Nombre del jugador: "+NJugador);
+			controladorCartas.darNombre(NJugador);
+		}catch(IOException e) {
+			System.out.println("No se ha podido guardar el nombre del jugador.");
+		}	
 	}
 	public JuegoVisual() {
 		setBackground(Color.WHITE);
@@ -83,6 +102,8 @@ public class JuegoVisual extends JFrame {
 		carta6.setBounds(758, 382, 89, 124);
 		contentPane.add(carta6);
 		controladorCartas.addCard(carta6);
+		carta6.addActionListener(controladorCartas);
+
 		
 		JLabel reglas = new JLabel("Ordena las cartas de menor a mayor en el menor tiempo posible.");
 		reglas.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -90,23 +111,14 @@ public class JuegoVisual extends JFrame {
 		reglas.setBounds(136, 157, 654, 53);
 		contentPane.add(reglas);
 		
-		JLabel puntuacion = new JLabel("Puntuaci\u00F3n: ");
-		puntuacion.setFont(new Font("Tahoma", Font.BOLD, 14));
-		puntuacion.setBounds(136, 221, 317, 32);
-		contentPane.add(puntuacion);
-		
-		JLabel aciertos = new JLabel("Aciertos:");
-		aciertos.setFont(new Font("Tahoma", Font.BOLD, 14));
-		aciertos.setBounds(136, 264, 327, 32);
-		contentPane.add(aciertos);
-		
-		JLabel fallos = new JLabel("Fallos:");
-		fallos.setFont(new Font("Tahoma", Font.BOLD, 14));
-		fallos.setBounds(136, 307, 317, 32);
-		contentPane.add(fallos);
-		carta6.addActionListener(controladorCartas);
+		nombreJugador = new JLabel();
+		nombreJugador.setFont(new Font("Tahoma", Font.BOLD, 14));
+		nombreJugador.setBounds(273, 221, 203, 47);
+		contentPane.add(nombreJugador);
 		
 		controladorCartas.darBaraja(baraja);
-		controladorCartas.darTextos(puntuacion, aciertos, fallos);
+		TablaDePuntuaciones tablaPuntuaciones = new TablaDePuntuaciones();
+		controladorCartas.darTabla(tablaPuntuaciones);
+		controladorCartas.darPantallaJuego(this);
 	}
 }

@@ -56,14 +56,13 @@ public class TablaDePuntuaciones extends JFrame {
 		for(int i = 0; i<longitudArray-1;i++) {
 			if(listaPuntos.get(i).getPuntos()<puntosPartidaActual.getPuntos()&& esMasAlto) {
 				//Si es mejor, lo ponemos en la posicion que debe ocupar y desplazamos el resto hacia la derecha
-				//Mandamos el resultado pero al final del array, y usaremos esa posicion como auxiliar para reordenar el resto.
 				aux = listaPuntos.get(i);
 				listaPuntos.set(i, puntosPartidaActual);
 				esMasAlto = false;
 			}else if(!esMasAlto){
 				//hacemos lo siguiente : guardamos el valor a tratar.
 				aux2 = listaPuntos.get(i);
-				//Cogemos el valor que está en la referencia auxiliar y lo ponemos donde debe estar.
+				//Cogemos el valor que estÃ¡ en la referencia auxiliar y lo ponemos donde debe estar.
 				listaPuntos.set(i, aux);
 				//Cambiamos el valor de la referencia auxiliar para poder repetir el proceso.
 				aux = aux2;
@@ -118,10 +117,10 @@ public class TablaDePuntuaciones extends JFrame {
 		} catch (FileNotFoundException e) {
 			System.out.println("No hay fichero");
 		}catch (IOException e) {
-			System.out.println("Algo salió mal");
+			System.out.println("Algo saliÃ³ mal");
 		}
 
-		//Aqui empieza el contenido de la interfaz gráfica, que rellenaremos con los datos del fichero.
+		//Aqui empieza el contenido de la interfaz grÃ¡fica, que rellenaremos con los datos del fichero.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();

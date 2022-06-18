@@ -20,7 +20,6 @@ public class ControladorInicio implements ActionListener{
 	private int pasaTextos = 0;
 	
 	public void actionPerformed(ActionEvent e) {
-		botonContinuar.setText(nombre);
 		if(pasaTextos <=5 ) {
 			txtMostrar.setText(listaFrases.get(pasaTextos));
 			pasaTextos++;
@@ -51,10 +50,10 @@ public class ControladorInicio implements ActionListener{
 	private void rellenar() {
 		listaFrases.add(0, "Saludos usuario!");
 		listaFrases.add(1, "Introduce tu nombre: ");//Sacamos texto
-		listaFrases.add(2, "Gracias! Usaremos tu nombre para añadirlo a la tabla de puntuaciones. ");//Ocultamos el texto
+		listaFrases.add(2, "Gracias! Usaremos tu nombre para aÃ±adirlo a la tabla de puntuaciones. ");//Ocultamos el texto
 		listaFrases.add(3, "Te voy a explicar las reglas del juego: ");
-		listaFrases.add(4, "Debes ordenar las cartas lo más rápido posible.");
-		listaFrases.add(5, "En cuanto le des a continuar comenzará el juego. . . ¡YA PUEDES CORRER!"); // Cambiamos el botón de "Continuar a Empezar"
+		listaFrases.add(4, "Debes ordenar las cartas lo mÃ¡s rÃ¡pido posible.");
+		listaFrases.add(5, "En cuanto le des a continuar comenzarÃ¡ el juego. . . Â¡YA PUEDES CORRER!"); // Cambiamos el botÃ³n de "Continuar a Empezar"
 	}
 	public void vincularBoton(JButton botonContinuar) {
 		this.botonContinuar = botonContinuar;

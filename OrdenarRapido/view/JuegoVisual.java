@@ -6,56 +6,75 @@ import java.awt.EventQueue;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import controller.ControladorCartas;
+import controller.ControladorInicio;
 import model.Baraja;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 
 public class JuegoVisual extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private ControladorCartas controladorCartas = new ControladorCartas();
 	private Baraja baraja = new Baraja();
-	private String NJugador;
+	private String nJugador;
 	private JLabel nombreJugador;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					JuegoVisual frame = new JuegoVisual();
-					frame.pedirNombre();
-					frame.setVisible(true);
-					Thread.sleep(1000);
-					frame.controladorCartas.jugar();
+					JFrame pantallaInicio = new JFrame("Pantalla inicio");
+					pantallaInicio.setDefaultCloseOperation(EXIT_ON_CLOSE);
+					pantallaInicio.setVisible(true);
+					pantallaInicio.setBounds(10, 10, 1000, 800);
+					JPanel c = new JPanel();
+					pantallaInicio.setContentPane(c);
+					c.setLayout(null);
+					c.setBackground(new Color(15, 106, 48 ));
+					c.setBorder(new EmptyBorder(5, 5, 5, 5));
+					JLabel informacionInicio = new JLabel("¡¡Ordena Rápido!!");
+					informacionInicio.setForeground(Color.WHITE);
+					informacionInicio.setFont(new Font("Tahoma", Font.BOLD, 18));
+					informacionInicio.setBounds(200, 250, 700, 100);
+					JTextField textoInicio = new JTextField();
+					textoInicio.setFont(new Font("Tahoma", Font.BOLD, 18));
+					textoInicio.setBounds(300, 400, 240, 40);
+					textoInicio.setVisible(false);
+					JButton botonInicio = new JButton("Jugar");
+					botonInicio.setFont(new Font("Tahoma", Font.BOLD, 18));
+					botonInicio.setBounds(300, 500, 240, 40);
+					c.add(informacionInicio);
+					c.add(textoInicio);
+					c.add(botonInicio);
+					ControladorInicio controlI = new ControladorInicio();
+					controlI.darPantallas(pantallaInicio, frame);
+					controlI.vincularBoton(botonInicio);
+					botonInicio.addActionListener(controlI);
+					controlI.pasarCuadroNombre(textoInicio);
+					controlI.pasarEnunciado(informacionInicio);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-	//Le pediremos el nombre al jugador sin interfaz gráfica por ahora.
-	protected void pedirNombre() {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			System.out.println("Introduce tu nombre: ");
-			NJugador = bf.readLine();
-			nombreJugador.setText("Nombre del jugador: "+NJugador);
-			controladorCartas.darNombre(NJugador);
-		}catch(IOException e) {
-			System.out.println("No se ha podido guardar el nombre del jugador.");
-		}	
+	public void usarControlador(String nombreJugador) {
+		nJugador=nombreJugador;
+		controladorCartas.jugar();
+		controladorCartas.darNombre(nJugador);
 	}
 	public JuegoVisual() {
 		setBackground(Color.WHITE);
 		setTitle("Juego de Cartas");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 901, 556);
+		setBounds(10, 10, 1000, 800);
+		toFront();
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(15, 106, 48 ));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -105,12 +124,6 @@ public class JuegoVisual extends JFrame {
 		carta6.addActionListener(controladorCartas);
 
 		
-		JLabel reglas = new JLabel("Ordena las cartas de menor a mayor en el menor tiempo posible.");
-		reglas.setFont(new Font("Tahoma", Font.BOLD, 16));
-		reglas.setBackground(Color.WHITE);
-		reglas.setBounds(136, 157, 654, 53);
-		contentPane.add(reglas);
-		
 		nombreJugador = new JLabel();
 		nombreJugador.setFont(new Font("Tahoma", Font.BOLD, 14));
 		nombreJugador.setBounds(273, 221, 203, 47);
@@ -119,6 +132,5 @@ public class JuegoVisual extends JFrame {
 		controladorCartas.darBaraja(baraja);
 		TablaDePuntuaciones tablaPuntuaciones = new TablaDePuntuaciones();
 		controladorCartas.darTabla(tablaPuntuaciones);
-		controladorCartas.darPantallaJuego(this);
 	}
 }
